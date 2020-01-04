@@ -1,25 +1,34 @@
-# Simple Spring Boot 2.0 demo
-This is simple spring-boot application demo. 
+# Spring Boot Authenticated encryption persistence PoC
+The PoC how to defend against tampering of encrypted data at persistence layer
 
-### Rest Endpoints
-* __GET__ http://localhost:8080/data/info
-* __POST__ http://localhost:8080/data/message 
-```
-{ "data": "message" }
-```
+Attack example
+===============
+An encryption is used to prevent information disclosure at DB layer, but it is not prevents sensitive data tampering.
+Suppose, the encrypted employee salary field value were tampered with another employee higher salary stored in the same table.
+```SQL
+ID | First Name | Last Name | Email | Position | Salary (Encrypted)
+1, 'John', 'Smith', 'john_smith@companyname.com', 'CEO', 'ZHNmNDNnYWRmZzQ1MjR2NDJmMjRm'
+....
+999, 'Joe', 'Doe', 'joe_doe@companyname.com', 'Software Engineer', 'ZHNmNDNnYWRmZzQ1MjR2NDJmMjRm' <-- Tampered with CEO salary
+ ```
 
-* __POST__ http://localhost:8080/data/generics - REST endpoint handling generic data payloads
-```
-{"name":"simpleData","data":{"@class":"SimpleDataPayload","simpleData":"simple"}}
-```
-```
-{"name":"complexData","data":{"@class":"ComplexDataPayload","complexData":"complex"}}
-```
-### Swagger API docs
-* __GET__ http://localhost:8080/v2/api-docs
 
-### Build and run
-```
-gradle clean build
-java -jar build/libs/demo-0.0.1-SNAPSHOT.jar
+PoC
+===============
+The solution is to use authenticated encryption.
+Demonstration and PoC of the solution may be found here: https://github.com/rusakovichma/authenticated-persistence-poc/blob/master/src/test/java/com/github/rusakovichma/persistance/authenticated/poc/controller/PersistenceSalaryTamperingAttack.java
+```JAVA
+        @Sql({"classpath:schema_h2_cleaning.sql", "classpath:schema_h2_salary_tampering.sql"})
+        @Test
+        public void testGetEmployee() {
+            Employee ceoEmployee = restTemplate.getForObject(String.format("http://localhost:%d/employees/1", port), Employee.class);
+            assertEquals(99999, (int) ceoEmployee.getSalary());
+            assertNull(ceoEmployee.getSalaryEncrypted());
+            assertNull(ceoEmployee.getNonce());
+
+            ResponseEntity<Employee> devEmployee = restTemplate.getForEntity(String.format("http://localhost:%d/employees/999", port), Employee.class);
+            System.out.println(devEmployee);
+            //Tampering detected
+            assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), devEmployee.getStatusCodeValue());
+        }
 ```
