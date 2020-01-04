@@ -10,7 +10,7 @@ import java.security.SecureRandom;
 /**
  * Generates an AES key from random.
  */
-public class JavaxKeyGenerator implements CipherKeyGenerator {
+public class AesKeyGenerator implements CipherKeyGenerator {
 
     // Note you must have "Java Cryptography Extension (JCE) Unlimited Strength Jurisdiction Policy Files 8" installed
     // to generate 256 bit AES keys.

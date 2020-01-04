@@ -22,10 +22,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
-public class JavaxCipherServiceTest {
+public class AesGcmCipherServiceTest {
 
     private CipherService generateCipherService() throws Exception {
-        final CipherKeyGenerator keyGenerator = new JavaxKeyGenerator();
+        final CipherKeyGenerator keyGenerator = new AesKeyGenerator();
         final SecretKey secretKey = keyGenerator.generateKey();
 
         final NonceGenerator nonceGenerator = new NonceGenerator();
@@ -34,7 +34,7 @@ public class JavaxCipherServiceTest {
         final AlgorithmConstraints constraints = new DecentAlgorithmConstraints();
 
         final CipherContext context = new JavaxCipherContext(secretKey, constraints, expirationDate, nonceGenerator, clock);
-        return new JavaxCipherService(context);
+        return new AesGcmCipherService(context);
     }
 
     @Test

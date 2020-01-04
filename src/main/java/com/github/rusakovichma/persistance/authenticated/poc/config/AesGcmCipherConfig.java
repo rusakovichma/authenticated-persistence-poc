@@ -4,7 +4,7 @@ import com.github.rusakovichma.persistance.authenticated.poc.cipher.CipherKeyGen
 import com.github.rusakovichma.persistance.authenticated.poc.cipher.CipherService;
 import com.github.rusakovichma.persistance.authenticated.poc.cipher.javax.DecentAlgorithmConstraints;
 import com.github.rusakovichma.persistance.authenticated.poc.cipher.javax.JavaxCipherContext;
-import com.github.rusakovichma.persistance.authenticated.poc.cipher.javax.JavaxCipherService;
+import com.github.rusakovichma.persistance.authenticated.poc.cipher.javax.AesGcmCipherService;
 import com.github.rusakovichma.persistance.authenticated.poc.nonce.NonceGenerator;
 import com.github.rusakovichma.persistance.authenticated.poc.cipher.javax.ConstantCipherKey;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +18,7 @@ import java.time.Duration;
 import java.time.Instant;
 
 @Configuration
-public class CipherConfig {
+public class AesGcmCipherConfig {
 
     @Value("${antitampering.encryption.poc.private.key}")
     private String privateKey;
@@ -37,7 +37,7 @@ public class CipherConfig {
             final Instant expirationDate = clock.instant().plus(Duration.ofDays(10));
             final AlgorithmConstraints constraints = new DecentAlgorithmConstraints();
 
-            return new JavaxCipherService(
+            return new AesGcmCipherService(
                     new JavaxCipherContext(secretKey, constraints, expirationDate, nonceGenerator, clock)
             );
         } catch (Exception ex) {

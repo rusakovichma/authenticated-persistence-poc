@@ -14,7 +14,7 @@ import java.security.NoSuchAlgorithmException;
 /**
  * A type safe front end to an authenticated encryption service.
  */
-public class JavaxCipherService implements CipherService {
+public class AesGcmCipherService implements CipherService {
 
     private static final String AES_GCM = "AES/GCM/NoPadding";
     private static final int GCM_NONCE_LENGTH = 12; // in bytes
@@ -22,7 +22,7 @@ public class JavaxCipherService implements CipherService {
 
     private final CipherContext context;
 
-    public JavaxCipherService(CipherContext context) throws NoSuchAlgorithmException {
+    public AesGcmCipherService(CipherContext context) throws NoSuchAlgorithmException {
         this.context = context;
     }
 
