@@ -27,8 +27,7 @@ Demonstration and PoC of the solution may be found here: https://github.com/rusa
             assertNull(ceoEmployee.getNonce());
 
             ResponseEntity<Employee> devEmployee = restTemplate.getForEntity(String.format("http://localhost:%d/employees/999", port), Employee.class);
-            System.out.println(devEmployee);
-            //Tampering detected
+            //Tampering detected -> INTERNAL_SERVER_ERROR
             assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), devEmployee.getStatusCodeValue());
         }
 ```
