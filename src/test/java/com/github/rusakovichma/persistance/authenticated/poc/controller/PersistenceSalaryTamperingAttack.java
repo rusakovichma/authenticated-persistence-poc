@@ -35,7 +35,6 @@ public class PersistenceSalaryTamperingAttack {
         assertNull(ceoEmployee.getNonce());
 
         ResponseEntity<Employee> devEmployee = restTemplate.getForEntity(String.format("http://localhost:%d/employees/999", port), Employee.class);
-        System.out.println(devEmployee);
         //Tampering detected
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), devEmployee.getStatusCodeValue());
     }
