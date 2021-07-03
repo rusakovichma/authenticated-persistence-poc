@@ -4,14 +4,22 @@ The PoC how to defend against tampering of encrypted data at persistence layer
 Attack example
 ===============
 An encryption is used to prevent information disclosure at DB layer, but it is not prevents sensitive data tampering.
-Suppose, the encrypted employee salary field value were tampered with another employee higher salary stored in the same table.
+Lets imagine the following table structure:
+```SQL
+ID | First Name | Last Name | Email | Position | Salary (Encrypted)
+1, 'John', 'Smith', 'john_smith@companyname.com', 'CEO', 'ZHNmNDNnYWRmZzQ1MjR2NDJmMjRm'
+....
+999, 'Joe', 'Doe', 'joe_doe@companyname.com', 'Software Engineer', 'HNdrmQ2NMjRDNZqQ1RD8eRtCerWm'
+ ```
+
+Suppose, the encrypted employee salary field value were tampered with another employee salary (for example, with CEO salary encrypted value) stored in the same table.
 ```SQL
 ID | First Name | Last Name | Email | Position | Salary (Encrypted)
 1, 'John', 'Smith', 'john_smith@companyname.com', 'CEO', 'ZHNmNDNnYWRmZzQ1MjR2NDJmMjRm'
 ....
 999, 'Joe', 'Doe', 'joe_doe@companyname.com', 'Software Engineer', 'ZHNmNDNnYWRmZzQ1MjR2NDJmMjRm' <-- Tampered with CEO salary
  ```
-
+Result: Now the employee has the salary as the CEO has.
 
 PoC
 ===============
